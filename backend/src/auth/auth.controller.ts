@@ -59,6 +59,13 @@ export class AuthController {
 			this.authService.removeRefreshTokenToResponse(res)
 			throw new UnauthorizedException('Refresh token not passed')
 		}
+
+		const { refreshToken, ...response } =
+			await this.authService.getNewTokens(refreshTokenFromCookies)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return response
 	}
 
 	@HttpCode(200)
